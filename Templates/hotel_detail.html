@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ details.name }} - Hotel Details</title>
+    <style>
+        body {
+            font-family: Garamond;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            overflow: hidden;
+        }
+        #map {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .sidebar {
+            position: absolute;
+            top: 10%;
+            left: 5%;
+            width: 30%;
+            height: 80%;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            overflow-y: auto;
+        }
+        .sidebar h1 {
+            margin-top: 0;
+        }
+        .reviews-container {
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        .review {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        .review:last-child {
+            border-bottom: none;
+        }
+        .book-button, .back-button {
+            display: inline-block;
+            width: 45%;
+            padding: 10px;
+            margin: 10px 2%;
+            background-color: #5fbcdb;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        .book-button:hover, .back-button:hover {
+            background-color: #6CA0DC;
+            transform: scale(1.05);
+        }
+        .back-button {
+            background-color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div class="sidebar">
+        <h1>{{ details.name }} (Our Rating: {{ details.sentiment_score }})</h1>
+        <h2>Address</h2>
+        <p>{{ details.address }}</p>
+        <h2>User Reviews and Ratings ({{ details.avg_rating }})</h2>
+        <div class="reviews-container">
+            {% for review, rating in details.reviews %}
+                <div class="review">
+                    <p><strong>Rating:</strong> {{ rating }}</p>
+                    <p>{{ review }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        <a href="{{ details.website }}" target="_blank" class="book-button">Book Now</a>
+        <a href="/" class="back-button">Back to Search</a>
+    </div>
+    <script>
+        function initMap() {
+            var latitude = {{ details.latitude }};
+            var longitude = {{ details.longitude }};
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: latitude, lng: longitude },
+                zoom: 15
+            });
+            var marker = new google.maps.Marker({
+                position: { lat: latitude, lng: longitude },
+                map: map,
+                title: '{{ details.name }}'
+            });
+        }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBvwZ5MJMrvZJU3XXAXJnvNLKz2fsKLsGE&callback=initMap"></script>
+</body>
+</html>

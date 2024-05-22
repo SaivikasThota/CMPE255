@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel Discovery</title>
+<style>
+/* Global Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header Styles */
+.header {
+    background-color: #007bff;
+    color: white;
+    padding: 20px 0;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 36px;
+}
+
+.search-form {
+    margin-top: 20px;
+}
+
+.search-form input[type="text"] {
+    width: 300px;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px 0 0 5px;
+}
+
+.search-form button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+}
+
+.search-form button:hover {
+    background-color: #004380;
+}
+
+/* Main Content Styles */
+.top-hotels {
+    padding: 40px 0;
+}
+
+.city-container {
+    margin-bottom: 40px;
+}
+
+.city-container h3 {
+    color: #007bff;
+    font-size: 24px;
+}
+
+.hotels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-gap: 20px;
+}
+
+.hotel-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    color: #333;
+    transition: transform 0.3s ease;
+}
+
+.hotel-card:hover {
+    transform: translateY(-5px);
+}
+
+.hotel-card h4 {
+    margin-top: 0;
+}
+
+.footer {
+    background-color: #007bff;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+</style>
+</head>
+<body>
+<header class="header">
+    <div class="container">
+        <h1>Hotel Recommender</h1>
+        <form action="/recommend" method="post" class="search-form">
+            <input type="text" name="input_text" placeholder="Search by Hotel Name or City" required>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+</header>
+
+<main>
+    <section class="top-hotels">
+        <div class="container">
+            <h2>Top Hotels by Popular Cities</h2>
+            {% for city, hotels in city_top_hotels.items() %}
+                <div class="city-container">
+                    <h3>{{ city }}</h3>
+                    <div class="hotels">
+                        {% for hotel in hotels %}
+                            <a href="{{ url_for('hotel_detail', hotel_name=hotel.hotel) }}" class="hotel-card">
+                                <h4>{{ hotel.hotel }}</h4>
+                                <p>Rating: {{ hotel.sentiment_score }}</p>
+                                <p>{{ hotel.address }}</p>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <p>&copy; 2024 Hotel Discovery. All rights reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>
